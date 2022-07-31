@@ -12,8 +12,4 @@
       "dest": "/"
     }
   ],
-
-  "rewrites": [
-    { "source": "/Images/(.*)", "destination": "/Images" },
-  ]
 }
