@@ -14,9 +14,6 @@
   ],
 
   "rewrites": [
-    { "source": "/routes/(.*)", "destination": "/routes" },
-    { "source": "/public/(.*)", "destination": "/public" },
     { "source": "/Images/(.*)", "destination": "/Images" },
-    { "source": "/config/(.*)", "destination": "/config" }
   ]
 }
