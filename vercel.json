@@ -12,5 +12,8 @@
       "dest": "/"
     }
   ],
-  "rewrites": [{ "source": "/models/(.*)", "destination": "/models" }]
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" },
+    { "source": "/journeys(.*)", "destination": "/journeys" }
+  ]
 }
