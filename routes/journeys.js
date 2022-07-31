@@ -17,7 +17,7 @@ const { Journey } = require("../models");
 var absolute_path = __dirname;
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, `${absolute_path}/Images`);
+    cb(null, `app/Images`);
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
