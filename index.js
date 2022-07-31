@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // static Images Folder
-app.use("/public/images", express.static("./public/images"));
+app.use("/Images", express.static("./public/Images"));
 
 app.use("/", indexRouter);
 app.use("/journeys", journeysRouter);
