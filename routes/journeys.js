@@ -14,10 +14,10 @@ const path = require("path");
 const { Journey } = require("../models");
 
 // Upload Image
-
+var absolute_path = __dirname;
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "Images");
+    cb(null, `${absolute_path}/Images`);
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
