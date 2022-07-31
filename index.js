@@ -7,9 +7,10 @@ var logger = require("morgan");
 
 var indexRouter = require("./routes/index");
 var journeysRouter = require("./routes/journeys");
+const { env } = require("process");
 
 var app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -23,6 +24,6 @@ app.use("/public/images", express.static("./public/images"));
 app.use("/", indexRouter);
 app.use("/journeys", journeysRouter);
 
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log(`Starting server on Port ${port}`);
 });
