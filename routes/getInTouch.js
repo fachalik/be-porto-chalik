@@ -3,7 +3,7 @@
 var express = require("express");
 const Validator = require("fastest-validator");
 var router = express.Router();
-const { cloudinary } = require("../utils/cloudinary");
+const SibApiV3Sdk = require("sib-api-v3-sdk");
 
 // ** validation
 const v = new Validator();
@@ -13,6 +13,7 @@ const multer = require("multer");
 const path = require("path");
 
 const { GetInTouch } = require("../models");
+const { response } = require("express");
 
 /* GET journey AlL listing. */
 router.get("/", async (req, res, next) => {
@@ -43,30 +44,52 @@ router.get("/:id", async (req, res, next) => {
 
 /* POST journey listing. */
 router.post("/", async (req, res, next) => {
+  const client = SibApiV3Sdk.ApiClient.instance;
+  var apiKey = client.authentications["api-key"];
+  apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
   const schema = {
     name: "string",
     email: "string",
     message: "string",
+    messageId: "string",
   };
 
-  try {
-    let info = {
-      name: req.body.name,
-      email: req.body.email,
-      message: req.body.message,
-    };
-    const validate = v.validate(info, schema);
+  let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
-    if (validate.length) {
-      return res.json({ status: 400, data: validate }).status(400);
+  let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+
+  sendSmtpEmail.subject = `Email from ${req.body.name} - ${req.body.email} in website fachalik`;
+  sendSmtpEmail.htmlContent = `<html><body><h1>You got email from ${req.body.name} with email ${req.body.email}</h1><p>${req.body.message}<p></body></html>`;
+  sendSmtpEmail.sender = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+  sendSmtpEmail.to = [{ email: "fachalik@gmail.com", name: "FA Chalik" }];
+
+  apiInstance.sendTransacEmail(sendSmtpEmail).then(
+    async function (data) {
+      let info = {
+        name: req.body.name,
+        email: req.body.email,
+        message: req.body.message,
+        messageId: data.messageId,
+      };
+      const validate = v.validate(info, schema);
+
+      if (validate.length) {
+        return res.json({ status: 400, data: validate }).status(400);
+      }
+      console.log(
+        "API called successfully. Returned data: " + JSON.stringify(data)
+      );
+      const getInTouch = await GetInTouch.create(info);
+      await res.json({ status: 200, data: getInTouch }).status(200);
+    },
+    function (error) {
+      console.error(error);
+      return res.json({ status: 400, data: error }).status(400);
     }
-
-    const getInTouch = await GetInTouch.create(info);
-
-    res.json({ status: 200, data: getInTouch }).status(200);
-  } catch (err) {
-    console.error(err);
-  }
+  );
 });
 
 /* PUT journey listing. */

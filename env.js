@@ -12,4 +12,5 @@ module.exports = {
   CLOUD_NAME: process.env.CLOUDINARY_NAME,
   CLOUD_API_KEY: process.env.CLOUDINARY_API_KEY,
   CLOUD_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+  SENDINBLUE_API_KEY: process.env.SENDINBLUE_API_KEY,
 };
