@@ -62,7 +62,9 @@ router.get("/:id", async (req, res, next) => {
   const techStack = await TechStack.findByPk(id);
 
   if (!techStack) {
-    return res.json({ status: 400, message: "Journey not found" }).status(400);
+    return res
+      .json({ status: 400, message: "Tech Stack Not Found" })
+      .status(400);
   }
 
   return res.json({ status: 200, data: techStack }).status(200);
@@ -130,7 +132,7 @@ router.put("/:id", upload, async (req, res, next) => {
 
   if (!techStack) {
     return res
-      .json({ status: 400, data: { message: "Journey not found" } })
+      .json({ status: 400, data: { message: "Tech Stack Not Found" } })
       .status(400);
   }
 
@@ -164,7 +166,7 @@ router.delete("/:id", async (req, res, next) => {
 
   if (!techStack) {
     return res
-      .json({ status: 400, data: { message: "Journey not found" } })
+      .json({ status: 400, data: { message: "Tech Stack Not Found" } })
       .status(400);
   }
   await cloudinary.uploader.destroy(techStack.cloudinary_id);
@@ -173,7 +175,7 @@ router.delete("/:id", async (req, res, next) => {
   res
     .json({
       status: 200,
-      data: { message: `Journey with id ${id} successfully deleted` },
+      data: { message: `Tech Stack with id ${id} successfully deleted` },
     })
     .status(200);
 });

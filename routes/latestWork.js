@@ -62,7 +62,9 @@ router.get("/:id", async (req, res, next) => {
   const latestWork = await LatestWork.findByPk(id);
 
   if (!latestWork) {
-    return res.json({ status: 400, message: "Journey not found" }).status(400);
+    return res
+      .json({ status: 400, message: "Latest Work Not Found" })
+      .status(400);
   }
 
   return res.json({ status: 200, data: latestWork }).status(200);
@@ -134,7 +136,7 @@ router.put("/:id", upload, async (req, res, next) => {
 
   if (!latestWork) {
     return res
-      .json({ status: 400, data: { message: "Journey not found" } })
+      .json({ status: 400, data: { message: "Latest Work Not Found" } })
       .status(400);
   }
 
@@ -169,7 +171,7 @@ router.delete("/:id", async (req, res, next) => {
 
   if (!latestWork) {
     return res
-      .json({ status: 400, data: { message: "Journey not found" } })
+      .json({ status: 400, data: { message: "Latest Work Not Found" } })
       .status(400);
   }
   await cloudinary.uploader.destroy(latestWork.cloudinary_id);
@@ -178,7 +180,7 @@ router.delete("/:id", async (req, res, next) => {
   res
     .json({
       status: 200,
-      data: { message: `Journey with id ${id} successfully deleted` },
+      data: { message: `Latest Work with id ${id} successfully deleted` },
     })
     .status(200);
 });
