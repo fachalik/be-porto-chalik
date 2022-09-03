@@ -21,6 +21,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "localhost:3000");
+  res.header("Access-Control-Allow-Origin", "fachalik.web.id"); // update to match the domain you will make the request from
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
 // static Images Folder
 app.use("/Images", express.static("./public/Images"));
 
