@@ -79,9 +79,9 @@ router.post("/", async (req, res, next) => {
       if (validate.length) {
         return res.json({ status: 400, data: validate }).status(400);
       }
-      console.log(
-        "API called successfully. Returned data: " + JSON.stringify(data)
-      );
+      // console.log(
+      //   "API called successfully. Returned data: " + JSON.stringify(data)
+      // );
       const getInTouch = await GetInTouch.create(info);
       await res.json({ status: 200, data: getInTouch }).status(200);
     },
