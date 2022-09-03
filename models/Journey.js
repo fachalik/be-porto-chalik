@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      cloudinary_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       jobRole: {
         type: DataTypes.STRING,
         allowNull: false,

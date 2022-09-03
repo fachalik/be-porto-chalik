@@ -3,6 +3,7 @@
 var express = require("express");
 const Validator = require("fastest-validator");
 var router = express.Router();
+const { cloudinary } = require("../utils/cloudinary");
 
 // ** validation
 const v = new Validator();
@@ -25,19 +26,19 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: "2000000",
-  },
+  storage: multer.diskStorage({}),
+
+  // storage: storage,
+  // limits: {
+  //   fileSize: "2000000",
+  // },
   fileFilter: (req, file, cb) => {
     const fileTypes = /jpeg|jpg|png/;
     const mimeType = fileTypes.test(file.mimetype);
     const extname = fileTypes.test(path.extname(file.originalname));
-
     if (mimeType && extname) {
       return cb(null, true);
     }
-
     cb("Give proper files formate to upload");
   },
 }).single("image");
@@ -71,36 +72,61 @@ router.get("/:id", async (req, res, next) => {
 router.post("/", upload, async (req, res, next) => {
   const schema = {
     image: "string",
+    cloudinary_id: "string",
     jobRole: "string",
     companyName: "string",
     Date: "string",
   };
 
-  let info = {
-    image: `${req.get("host")}/${req.file.path}`,
-    jobRole: req.body.jobRole,
-    companyName: req.body.companyName,
-    Date: req.body.Date,
-  };
+  try {
+    const result = await cloudinary.uploader.upload(req.file.path);
+    let info = {
+      image: result.secure_url,
+      cloudinary_id: result.public_id,
+      jobRole: req.body.jobRole,
+      companyName: req.body.companyName,
+      Date: req.body.Date,
+    };
+    const validate = v.validate(info, schema);
 
-  console.log(req.file.path);
+    if (validate.length) {
+      return res.json({ status: 400, data: validate }).status(400);
+    }
 
-  const validate = v.validate(info, schema);
+    const journey = await Journey.create(info);
 
-  if (validate.length) {
-    return res.json({ status: 400, data: validate }).status(400);
+    res.json({ status: 200, data: journey }).status(200);
+  } catch (err) {
+    console.error(err);
   }
-
-  const journey = await Journey.create(info);
-
-  res.json({ status: 200, data: journey }).status(200);
 });
 
 /* PUT journey listing. */
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", upload, async (req, res, next) => {
   // try {
   const id = req.params.id;
   let journey = await Journey.findByPk(id);
+  let info;
+  if (req.file !== undefined) {
+    await cloudinary.uploader.destroy(journey.cloudinary_id);
+    const result = await cloudinary.uploader.upload(req.file.path);
+    info = {
+      image: result.secure_url,
+      cloudinary_id: result.public_id,
+      jobRole: req.body.jobRole,
+      companyName: req.body.companyName,
+      Date: req.body.Date,
+    };
+  } else {
+    info = {
+      image: journey.image,
+      cloudinary_id: journey.cloudinary_id,
+      jobRole: req.body.jobRole,
+      companyName: req.body.companyName,
+      Date: req.body.Date,
+    };
+  }
+
   if (!journey) {
     return res
       .json({ status: 400, data: { message: "Journey not found" } })
@@ -109,18 +135,19 @@ router.put("/:id", async (req, res, next) => {
 
   const schema = {
     image: "string|optional",
+    cloudinary_id: "string|optional",
     jobRole: "string|optional",
     companyName: "string|optional",
     Date: "string|optional",
   };
 
-  const validate = await v.validate(req.body, schema);
+  const validate = await v.validate(info, schema);
 
   if (validate.length) {
     return res.json({ status: 400, data: validate }).status(400);
   }
 
-  journey = await journey.update(req.body, { id });
+  journey = await journey.update(info, { id });
   // res.send("ok");
   res.json({ status: 200, data: journey }).status(200);
   // } catch (err) {
@@ -139,7 +166,7 @@ router.delete("/:id", async (req, res, next) => {
       .json({ status: 400, data: { message: "Journey not found" } })
       .status(400);
   }
-
+  await cloudinary.uploader.destroy(journey.cloudinary_id);
   await journey.destroy();
 
   res

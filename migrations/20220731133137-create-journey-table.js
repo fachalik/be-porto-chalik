@@ -1,3 +1,5 @@
+/** @format */
+
 "use strict";
 
 module.exports = {
@@ -10,6 +12,10 @@ module.exports = {
         allowNull: false,
       },
       image: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      cloudinary_id: {
         type: Sequelize.STRING,
         allowNull: false,
       },
