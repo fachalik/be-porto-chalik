@@ -8,6 +8,7 @@ var logger = require("morgan");
 var indexRouter = require("./routes/index");
 var journeysRouter = require("./routes/journeys");
 var techStackRouter = require("./routes/techStack");
+var latestWorkRouter = require("./routes/latestWork");
 const { env } = require("process");
 
 var app = express();
@@ -24,7 +25,8 @@ app.use("/Images", express.static("./public/Images"));
 
 app.use("/", indexRouter);
 app.use("/journeys", journeysRouter);
-app.use("/techStack", techStackRouter);
+app.use("/tech-stack", techStackRouter);
+app.use("/latest-work", latestWorkRouter);
 
 app.listen(port, () => {
   console.log(`Starting server on Port ${port}`);
