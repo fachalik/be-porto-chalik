@@ -1,6 +1,6 @@
 /** @format */
 
-module.exports = (DataTypes, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   const TechStack = sequelize.define(
     "TechStack",
     {
