@@ -115,7 +115,7 @@ router.put("/:id", upload, async (req, res, next) => {
   if (req.file !== undefined) {
     await cloudinary.uploader.destroy(latestWork.cloudinary_id);
     const result = await cloudinary.uploader.upload(req.file.path);
-    let info = {
+    info = {
       image: result.secure_url,
       cloudinary_id: result.public_id,
       title: req.body.title,
