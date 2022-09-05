@@ -57,6 +57,25 @@ router.get("/", async (req, res, next) => {
 });
 
 /* GET journey AlL listing. */
+router.get("/get3Data", async (req, res, next) => {
+  const latestWork = await LatestWork.findAll();
+
+  if (!latestWork) {
+    return res
+      .json({ status: 400, message: "something wrong with server" })
+      .status(400);
+  }
+  let data;
+  if (latestWork.length > 3) {
+    data = latestWork.slice(0, 3);
+  } else {
+    data = latestWork.slice(0, latestWork.length);
+  }
+
+  return res.json({ status: 200, data }).status(200);
+});
+
+/* GET journey AlL listing. */
 router.get("/:id", async (req, res, next) => {
   const id = req.params.id;
   const latestWork = await LatestWork.findByPk(id);
@@ -78,6 +97,7 @@ router.post("/", upload, async (req, res, next) => {
     title: "string",
     category: "string",
     description: "string",
+    link: "string",
     Date: "string",
   };
 
@@ -89,6 +109,7 @@ router.post("/", upload, async (req, res, next) => {
       title: req.body.title,
       category: req.body.category,
       description: req.body.description,
+      link: req.body.link,
       Date: req.body.Date,
     };
     const validate = v.validate(info, schema);
@@ -121,6 +142,7 @@ router.put("/:id", upload, async (req, res, next) => {
       title: req.body.title,
       category: req.body.category,
       description: req.body.description,
+      link: req.body.link,
       Date: req.body.Date,
     };
   } else {
@@ -130,6 +152,7 @@ router.put("/:id", upload, async (req, res, next) => {
       title: req.body.title,
       category: req.body.category,
       description: req.body.description,
+      link: req.body.link,
       Date: req.body.Date,
     };
   }
@@ -146,6 +169,7 @@ router.put("/:id", upload, async (req, res, next) => {
     title: "string|optional",
     category: "string|optional",
     description: "string|optional",
+    link: "string|optional",
     Date: "string|optional",
   };
 

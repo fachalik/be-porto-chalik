@@ -14,7 +14,7 @@ var getInTouchRouter = require("./routes/getInTouch");
 const { env } = require("process");
 
 var app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3300;
 
 app.use(logger("dev"));
 app.use(express.json());
