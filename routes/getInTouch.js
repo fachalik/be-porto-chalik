@@ -46,7 +46,8 @@ router.get("/:id", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   const client = SibApiV3Sdk.ApiClient.instance;
   var apiKey = client.authentications["api-key"];
-  apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
+  apiKey.apiKey =
+    "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";
   const schema = {
     name: "string",
     email: "string",
