@@ -42,7 +42,7 @@ router.get(
 );
 
 router.get(
-  "/custom/iuran/:niknoka/:birthdate",
+  "/custom/tagihan/:niknoka/:birthdate",
   async function (req, res, next) {
     // var absolute_path = __dirname;
     let niknoka = await req.params.niknoka;
