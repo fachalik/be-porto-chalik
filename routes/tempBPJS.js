@@ -54,7 +54,7 @@ router.get(
     let hari = await birthdate.slice(6, 8);
 
     let response = await fetch(
-      `http://103.252.163.191:8000/bpjs/get/iuran/${niknoka}/${tahun}-${bulan}-${hari}`
+      `http://103.252.163.191:8000/bpjs/get/tagihan/${niknoka}/${tahun}-${bulan}-${hari}`
     )
       .then((res) => res.json())
       .then((json) => {
