@@ -11,7 +11,6 @@ var journeysRouter = require("./routes/journeys");
 var techStackRouter = require("./routes/techStack");
 var latestWorkRouter = require("./routes/latestWork");
 var getInTouchRouter = require("./routes/getInTouch");
-var tempBPJS = require("./routes/tempBPJS");
 const { env } = require("process");
 
 var app = express();
@@ -36,8 +35,6 @@ app.use("/journeys", journeysRouter);
 app.use("/tech-stack", techStackRouter);
 app.use("/latest-work", latestWorkRouter);
 app.use("/get-in-touch", getInTouchRouter);
-app.use("/tempBPJS", tempBPJS);
-
 app.listen(port, () => {
   console.log(`Starting server on Port ${port}`);
 });
