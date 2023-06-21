@@ -102,6 +102,7 @@ router.post("/", upload, async (req, res, next) => {
   };
 
   try {
+    console.log(req.file.path);
     const result = await cloudinary.uploader.upload(req.file.path);
     let info = {
       image: result.secure_url,
